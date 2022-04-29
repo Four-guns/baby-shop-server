@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Query } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
 @Controller('/api/user')
@@ -7,7 +7,7 @@ export class HomeController {
     userService: UserService;
 
     @Get('/')
-    async home() {
-        return this.userService.getUser();
+    async home(@Query('name') name?: string) {
+        return this.userService.getUser(name);
     }
 }
