@@ -1,1 +1,1 @@
-# baay-shop-server
+# baby-shop-server
