@@ -8,54 +8,118 @@ on:
     - published
 
 jobs:
-  checkout:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: 检查分支
-        uses: actions/checkout@v2
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
         with:
-          ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.TOKEN }}
+          script: sh deploy.sh
+    # steps:
+    #   - name: 检查分支
+    #     uses: actions/checkout@v2
+    #     with:
+    #       ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
 
-      - name: 安装 Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "14.x"
+    #   - name: 安装 Node
+    #     uses: actions/setup-node@v1
+    #     with:
+    #       node-version: "14.x"
 
-      - name: 安装 Hexo
-        run: |
-          export TZ='Asia/Shanghai'
-          npm install hexo-cli -g
+    #   - name: 安装 Hexo
+    #     run: |
+    #       export TZ='Asia/Shanghai'
+    #       npm install hexo-cli -g
 
-      - name: 缓存 Hexo
-        uses: actions/cache@v1
-        id: cache
-        with:
-          path: node_modules
-          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+    #   - name: 缓存 Hexo
+    #     uses: actions/cache@v1
+    #     id: cache
+    #     with:
+    #       path: node_modules
+    #       key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
 
-      - name: 安装依赖
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm install --save
+    #   - name: 安装依赖
+    #     if: steps.cache.outputs.cache-hit != 'true'
+    #     run: |
+    #       npm install --save
 
-      - name: 生成静态文件
-        run: |
-          hexo clean
-          hexo generate
+    #   - name: Set up SSH
+    #     run: |
+    #       mkdir -p ~/.ssh/
+    #       echo "$SSH_PRIVATE_KEY" > ./deploy.key
+    #       sudo chmod 600 ./deploy.key
+    #       echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    #     shell: bash
+    #     env:
+    #       SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+    #       SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
-      - name: 部署到github pages
-        run: |
-          git config --global user.name "mannix-lei"
-          git config --global user.email "zx2351634862@outlook.com"
-          git clone https://github.com/Three-guns/baby-shop-server.git  .deploy_git
-          hexo deploy
+    #   # (optional - only needed if your config uses environment variables)
+    #   - name: Create env file
+    #     run: |
+    #       touch .env
+    #       echo DATABASE_ADDRESS=${{ secrets.DATABASE_ADDRESS }} >> .env
 
-      - name: 部署到云服务器
-        uses: cross-the-world/scp-pipeline@master
-        with:
-          host: ${{ secrets.USER_HOST }}
-          user: ${{ secrets.USER_NAME }}
-          pass: ${{ secrets.USER_PASS }}
-          connect_timeout: 10s
-          local: './.deploy_git/*'
-          remote: '101.43.182.115'
+    #   - name: Install PM2
+    #     run: npm i pm2
+
+    #   - name: Deploy
+    #     run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging
+        # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
+        # run: yarn deploy
+
+# jobs:
+#   checkout:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 检查分支
+#         uses: actions/checkout@v2
+#         with:
+#           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
+
+#       - name: 安装 Node
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: "14.x"
+
+#       - name: 安装 Hexo
+#         run: |
+#           export TZ='Asia/Shanghai'
+#           npm install hexo-cli -g
+
+#       - name: 缓存 Hexo
+#         uses: actions/cache@v1
+#         id: cache
+#         with:
+#           path: node_modules
+#           key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+
+#       - name: 安装依赖
+#         if: steps.cache.outputs.cache-hit != 'true'
+#         run: |
+#           npm install --save
+
+#       - name: 生成静态文件
+#         run: |
+#           hexo clean
+#           hexo generate
+
+#       - name: 部署到github pages
+#         run: |
+#           git config --global user.name "mannix-lei"
+#           git config --global user.email "zx2351634862@outlook.com"
+#           git clone https://github.com/Three-guns/baby-shop-server.git  .deploy_git
+#           hexo deploy
+
+#       - name: 部署到云服务器
+#         uses: cross-the-world/scp-pipeline@master
+#         with:
+#           host: ${{ secrets.USER_HOST }}
+#           user: ${{ secrets.USER_NAME }}
+#           pass: ${{ secrets.USER_PASS }}
+#           connect_timeout: 10s
+#           local: './.deploy_git/*'
+#           remote: '101.43.182.115'
