@@ -24,28 +24,21 @@ jobs:
           echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
           echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
           echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
-  install-node:
-    runs-on: self-hosted
-    steps:
+
       - name: 安装 Node
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
-  install-dependence:
-    runs-on: self-hosted
-    steps:
+
       - name: 安装依赖
       - run: npm install
-  build:
-    runs-on: self-hosted
-    steps:
+
       - name: 构建
       - run: npm run build --if-present
-  deploy:
-    runs-on: self-hosted
-    steps:
+
       - name: 部署
       - run: pm2 restart App # add this new line
+
 
   # build:
   #   runs-on: ubuntu-latest
