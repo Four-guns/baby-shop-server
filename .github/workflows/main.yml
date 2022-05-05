@@ -75,7 +75,7 @@ jobs:
 
       - name: 部署启动
         run: |
-          pm2 restart midway_app
+          pm2 restart baby-shop-server
 
     #   - name: Set up SSH
     #     run: |
