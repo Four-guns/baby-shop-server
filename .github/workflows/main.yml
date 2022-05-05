@@ -8,20 +8,43 @@ on:
     - published
 
 jobs:
-  deploy:
+  check-branch:
     runs-on: self-hosted
     steps:
       - name: 检查分支
         uses: actions/checkout@v2
         with:
           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
-
+      - name: create env file
+        run: |
+          cd ../../src/config
+          touch mysql.config.ts
+          echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
+          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+          echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
+          echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
+          echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
+  install-node:
+    runs-on: self-hosted
+    steps:
       - name: 安装 Node
         uses: actions/setup-node@v1
         with:
           node-version: "14.x"
+  install-dependence:
+    runs-on: self-hosted
+    steps:
+      - name: 安装依赖
       - run: npm install
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: 构建
       - run: npm run build --if-present
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: 部署
       - run: pm2 restart App # add this new line
 
   # build:
