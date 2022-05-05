@@ -16,13 +16,25 @@ jobs:
         with:
           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
       - name: Create .env file
-        run: |
-          touch .env
-          echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
-          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
-          echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
-          echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
-          echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DEBUG: false
+          envkey_SECRET_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PWD: ${{ secrets.MYSQL_PWD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+          directory: ../../
+          file_name: .env
+          fail_on_empty: false
+        # run: |
+        #   touch .env
+        #   echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
+        #   echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+        #   echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
+        #   echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
+        #   echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
 
       - name: 安装 Node
         uses: actions/setup-node@v1
