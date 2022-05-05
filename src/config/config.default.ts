@@ -5,7 +5,7 @@ import {
     MYSQL_PORT,
     MYSQL_PWD,
     MYSQL_USERNAME,
-} from './mysql.config';
+} from '../../.env';
 
 export default (appInfo: MidwayAppInfo) => {
     return {

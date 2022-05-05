@@ -15,15 +15,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
-      - name: Create mysql.config.ts file
+      - name: Create .env file
         run: |
-          cd ../../src/config
-          touch mysql.config.ts
-          echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> mysql.config.ts
-          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> mysql.config.ts
-          echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> mysql.config.ts
-          echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> mysql.config.ts
-          echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> mysql.config.ts
+          touch .env
+          echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
+          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+          echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
+          echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
+          echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
 
       - name: 安装 Node
         uses: actions/setup-node@v1
