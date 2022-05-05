@@ -17,3 +17,4 @@ run/
 
 # 数据库信息
 src/config/mysql.config.ts
+.env

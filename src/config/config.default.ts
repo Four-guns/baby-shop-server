@@ -1,4 +1,11 @@
 import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
+import {
+    MYSQL_USERNAME,
+    MYSQL_PWD,
+    MYSQL_HOST,
+    MYSQL_PORT,
+    MYSQL_DATABASE,
+} from './mysql.config';
 
 export default (appInfo: MidwayAppInfo) => {
     return {
@@ -12,11 +19,11 @@ export default (appInfo: MidwayAppInfo) => {
              * 单数据库实例
              */
             type: 'mysql',
-            host: process.env.MYSQL_HOST || 'localhost',
-            port: process.env.MYSQL_PORT || 3306,
-            username: process.env.MYSQL_USERNAME,
-            password: process.env.MYSQL_PWD,
-            database: process.env.MYSQL_DATABASE,
+            host: MYSQL_HOST || 'localhost',
+            port: MYSQL_PORT || 3306,
+            username: MYSQL_USERNAME,
+            password: MYSQL_PWD,
+            database: MYSQL_DATABASE,
             synchronize: true, // 如果第一次使用，不存在表，有同步的需求可以写 true
             logging: false,
         },
