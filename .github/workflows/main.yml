@@ -75,7 +75,7 @@ jobs:
 
       - name: 部署启动
         run: |
-          pm2 restart App # add this new line
+          pm2 restart midway_app
 
     #   - name: Set up SSH
     #     run: |
