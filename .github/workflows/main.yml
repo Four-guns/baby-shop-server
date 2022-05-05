@@ -10,77 +10,66 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    steps:
-      - name: 检查分支
-        uses: actions/checkout@v2
-        with:
-          ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          envkey_DEBUG: false
-          envkey_SECRET_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-          MYSQL_PWD: ${{ secrets.MYSQL_PWD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
-          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
-          directory: ../../
-          file_name: .env
-          fail_on_empty: false
-        # run: |
-        #   touch .env
-        #   echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
-        #   echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
-        #   echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
-        #   echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
-        #   echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
-
-      - name: 安装 Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "14.x"
-      - run: npm install
-      - run: npm run build --if-present
-      - run: pm2 restart App # add this new line
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: executing remote ssh commands using ssh key
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         script: sh /home/deploy.sh
     # steps:
     #   - name: 检查分支
     #     uses: actions/checkout@v2
     #     with:
     #       ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
+    #   - name: Create .env file
+    #     run: |
+    #       touch .env
+    #       echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
+    #       echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+    #       echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
+    #       echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
+    #       echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
 
     #   - name: 安装 Node
     #     uses: actions/setup-node@v1
     #     with:
     #       node-version: "14.x"
+    #   - run: npm install
+    #   - run: npm run build --if-present
+    #   - run: pm2 restart App # add this new line
 
-    #   - name: 安装 Hexo
-    #     run: |
-    #       export TZ='Asia/Shanghai'
-    #       npm install hexo-cli -g
+    steps:
+      - name: 检查分支
+        uses: actions/checkout@v2
+        with:
+          ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
 
-    #   - name: 缓存 Hexo
-    #     uses: actions/cache@v1
-    #     id: cache
-    #     with:
-    #       path: node_modules
-    #       key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+      - name: Create .env file
+        run: |
+          touch .env
+          echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
+          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+          echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
+          echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
+          echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
 
-    #   - name: 安装依赖
-    #     if: steps.cache.outputs.cache-hit != 'true'
-    #     run: |
-    #       npm install --save
+      - name: 安装 Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - name: 安装 Hexo
+        run: |
+          export TZ='Asia/Shanghai'
+          npm install hexo-cli -g
+
+      - name: 缓存 Hexo
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+
+      - name: 安装依赖
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm install --save
+      - run: npm run build --if-present
+      - run: pm2 restart App # add this new line
 
     #   - name: Set up SSH
     #     run: |
@@ -93,16 +82,7 @@ jobs:
     #       SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
     #       SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
-    #   # (optional - only needed if your config uses environment variables)
-    #   - name: Create env file
-    #     run: |
-    #       touch .env
-    #       echo DATABASE_ADDRESS=${{ secrets.DATABASE_ADDRESS }} >> .env
-
-    #   - name: Install PM2
-    #     run: npm i pm2
-
-    #   - name: Deploy
-    #     run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging
+      # - name: Deploy
+      #   run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging
         # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
         # run: yarn deploy
