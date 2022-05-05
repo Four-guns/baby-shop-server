@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
-      - name: create mysql.config.ts file
-      - run: |
+      - name: Create mysql.config.ts file
+        run: |
           cd ../../src/config
           touch mysql.config.ts
           echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> mysql.config.ts
