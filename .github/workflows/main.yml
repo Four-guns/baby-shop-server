@@ -16,7 +16,7 @@ jobs:
         with:
           ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
       - name: create env file
-        run: |
+      - run: |
           cd ../../src/config
           touch mysql.config.ts
           echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
