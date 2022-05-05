@@ -23,7 +23,7 @@ jobs:
         run: |
           touch .env
           echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
-          echo $MYSQL_PWD | base64 --decode >> .env
+          echo MYSQL_PWD="$(base64 -d <<< "$MYSQL_PWD")" >> .env
           echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
           echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
           echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
