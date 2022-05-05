@@ -2,7 +2,7 @@ name: auto deploy
 on:
   push:
     branches:
-      - master #2020年10月后github新建仓库默认分支改为main，注意更改
+      - master
   release:
     types:
     - published
@@ -10,39 +10,20 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    # steps:
-    #   - name: 检查分支
-    #     uses: actions/checkout@v2
-    #     with:
-    #       ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
-    #   - name: Create .env file
-    #     run: |
-    #       touch .env
-    #       echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
-    #       echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
-    #       echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
-    #       echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
-    #       echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
-
-    #   - name: 安装 Node
-    #     uses: actions/setup-node@v1
-    #     with:
-    #       node-version: "14.x"
-    #   - run: npm install
-    #   - run: npm run build --if-present
-    #   - run: pm2 restart App # add this new line
 
     steps:
       - name: 检查分支
         uses: actions/checkout@v2
         with:
-          ref: master #2020年10月后github新建仓库默认分支改为main，注意更改
+          ref: master
 
       - name: Create .env file
+        env: 
+          MYSQL_PWD: ${{ secrets.MYSQL_PWD }}
         run: |
           touch .env
           echo MYSQL_USERNAME =${{ secrets.MYSQL_USERNAME }} >> .env
-          echo MYSQL_PWD =${{ secrets.MYSQL_PWD }} >> .env
+          echo $MYSQL_PWD | base64 --decode >> .env
           echo MYSQL_DATABASE =${{ secrets.MYSQL_DATABASE }} >> .env
           echo MYSQL_HOST =${{ secrets.MYSQL_HOST }} >> .env
           echo MYSQL_PORT =${{ secrets.MYSQL_PORT }} >> .env
