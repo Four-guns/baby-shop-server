@@ -8,10 +8,12 @@
         "@midwayjs/core": "^3.0.0",
         "@midwayjs/decorator": "^3.0.0",
         "@midwayjs/orm": "^3.0.0",
+        "@midwayjs/swagger": "^3.3.5",
         "@midwayjs/web": "^3.0.0",
         "dotenv": "^16.0.0",
         "egg": "^2.0.0",
         "mysql2": "^2.3.3",
+        "swagger-ui-dist": "^4.10.3",
         "typeorm": "~0.3.0"
     },
     "devDependencies": {
