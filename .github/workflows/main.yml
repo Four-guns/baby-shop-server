@@ -14,9 +14,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: butlerlogic/action-autotag@stable
       with:
-        GITHUB_TOKEN: "${{ secrets.TOKEN }}"
+        # GITHUB_TOKEN: "${{ secrets.TOKEN }}"
         strategy: package
-        root: "../../"
+        root: "/"
         tag_prefix: "v"
         commit_message_template: "({{sha}} by {{author}}) {{message}}"
         version: "${{ steps.previous_step.outputs.version }}"
@@ -28,6 +28,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master
+
+      - name: Autotagger
+        uses: ButlerLogic/action-autotag@1.1.1
 
       - name: Create .env file
         env: 
