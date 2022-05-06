@@ -17,4 +17,25 @@ export class UserService {
                 : {},
         });
     }
+
+    async login(uname: string, pwd: string) {
+        const result = await this.userModel.findOne({
+            where: {
+                uname,
+                pwd,
+            },
+        });
+
+        if (result) {
+            return {
+                data: result,
+                status: 200,
+                message: '登录成功',
+            };
+        }
+        return {
+            status: 400,
+            message: '用户名或密码填写有误',
+        };
+    }
 }
