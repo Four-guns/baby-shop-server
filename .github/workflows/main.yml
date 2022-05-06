@@ -8,18 +8,6 @@ on:
     - published
 
 jobs:
-  autotag:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: butlerlogic/action-autotag@stable
-      with:
-        # GITHUB_TOKEN: "${{ secrets.TOKEN }}"
-        strategy: package
-        root: "/"
-        tag_prefix: "v"
-        commit_message_template: "({{sha}} by {{author}}) {{message}}"
-        version: "${{ steps.previous_step.outputs.version }}"
   deploy:
     runs-on: self-hosted
 
@@ -31,6 +19,13 @@ jobs:
 
       - name: Autotagger
         uses: ButlerLogic/action-autotag@1.1.1
+        with:
+          GITHUB_TOKEN: "${{ secrets.TOKEN }}"
+          strategy: package
+          root: "/"
+          tag_prefix: "v"
+          commit_message_template: "({{sha}} by {{author}}) {{message}}"
+          version: "${{ steps.previous_step.outputs.version }}"
 
       - name: Create .env file
         env: 
