@@ -7,6 +7,7 @@ import {
     Query,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
+import { LoginInfoDto } from '../swagger/user';
 
 @Controller('/api/user')
 export class HomeController {
@@ -19,10 +20,7 @@ export class HomeController {
     }
 
     @Post('/login')
-    async login(
-        @Body('username') username: string,
-        @Body('password') password: string
-    ) {
-        return this.userService.login(username, password);
+    async login(@Body() loginInfo: LoginInfoDto) {
+        return this.userService.login(loginInfo.username, loginInfo.password);
     }
 }
