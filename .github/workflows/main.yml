@@ -8,6 +8,18 @@ on:
     - published
 
 jobs:
+  autotag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: butlerlogic/action-autotag@stable
+      with:
+        GITHUB_TOKEN: "${{ secrets.TOKEN }}"
+        strategy: package
+        root: "../../"
+        tag_prefix: "v"
+        commit_message_template: "({{sha}} by {{author}}) {{message}}"
+        version: "${{ steps.previous_step.outputs.version }}"
   deploy:
     runs-on: self-hosted
 
@@ -33,20 +45,8 @@ jobs:
         with:
           node-version: "14.x"
 
-      # - name: 安装 Hexo
-      #   run: |
-      #     export TZ='Asia/Shanghai'
-      #     npm install hexo-cli -g
-
-      # - name: 缓存 Hexo
-      #   uses: actions/cache@v1
-      #   id: cache
-      #   with:
-      #     path: node_modules
-      #     key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
 
       - name: 安装依赖
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm install --save
 
@@ -57,19 +57,3 @@ jobs:
       - name: 部署启动
         run: |
           pm2 restart baby-shop-server
-
-    #   - name: Set up SSH
-    #     run: |
-    #       mkdir -p ~/.ssh/
-    #       echo "$SSH_PRIVATE_KEY" > ./deploy.key
-    #       sudo chmod 600 ./deploy.key
-    #       echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    #     shell: bash
-    #     env:
-    #       SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-    #       SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-
-      # - name: Deploy
-      #   run: env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging
-        # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
-        # run: yarn deploy
