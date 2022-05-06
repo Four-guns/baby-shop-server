@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: self-hosted
 
     steps:
       - name: 检查分支
@@ -24,7 +24,7 @@ jobs:
           strategy: package
           root: "/"
           tag_prefix: "v"
-          commit_message_template: "({{sha}} by {{author}}) {{message}}"
+          commit_message_template: "(${{sha}} by ${{author}}) ${{message}}"
           version: "${{ steps.previous_step.outputs.version }}"
 
       - name: Create .env file
