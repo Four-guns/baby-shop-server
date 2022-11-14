@@ -23,4 +23,9 @@ export class HomeController {
     async login(@Body() loginInfo: LoginInfoDto) {
         return this.userService.login(loginInfo.username, loginInfo.password);
     }
+
+    @Post('/register')
+    async register(@Body() loginInfo: LoginInfoDto) {
+        return this.userService.registerUser(loginInfo.username);
+    }
 }

@@ -8,6 +8,8 @@ export default {
         port: null,
     },
     security: {
-        csrf: false,
+        csrf: {
+            enable: false,
+        },
     },
 } as MidwayConfig & DefaultConfig;
